@@ -28,7 +28,7 @@ jobs:
     runs-on:  ubuntu-latest
     steps:
       - name: Wykonaj deployment na server VPS
-        uses: appleboy/ssh-actions@v1.0.3
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST  }}
           username: ${{ secrets.SSH_USERNAME }}
