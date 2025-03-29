@@ -28,27 +28,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-        - name: Kopiowanie plików na serwer i uruchomienie docker-compose
-          uses: appleboy/scp-action@v0.1.7
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            password: ${{ secrets.SSH_PASSWORD }}
-            source: "docker-compose.yml"
-            target: "~/app"
+      - name: Kopiowanie plików na serwer i uruchomienie docker-compose
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "docker-compose.yml"
+          target: "~/app"
 
-         - name: Deployment aplikacji przez SSH (docker-compose)
-           uses: appleboy/ssh-action@v1.0.3
-           with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            password: ${{ secrets.SSH_PASSWORD }}
-            script: |
-              cd ~/app
-              docker login -u ${{ secrets.DOCKERHUB_USERNAME }} \
-              -p ${{ secrets.DOCKERHUB_TOKEN  }}
-              docker compose pull
-              docker compose up -d --force-recreate
+       - name: Deployment aplikacji przez SSH (docker-compose)
+         uses: appleboy/ssh-action@v1.0.3
+         with:
+           host: ${{ secrets.SSH_HOST }}
+           username: ${{ secrets.SSH_USERNAME }}
+           password: ${{ secrets.SSH_PASSWORD }}
+           script: |
+             cd ~/app
+             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} \
+             -p ${{ secrets.DOCKERHUB_TOKEN  }}
+             docker compose pull
+             docker compose up -d --force-recreate
 
