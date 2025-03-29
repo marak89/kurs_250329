@@ -1,0 +1,46 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: moj_nginx
+   # ports:
+    #  - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+#      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kurs.rule=Host(`kurs.vps1.m89.pl`)"
+      - "traefik.http.routers.kurs.entrypoints=websecure"
+      - "traefik.http.routers.kurs.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.kurs.service=nginx-kurs@docker"
+
+    networks:
+      - traefik_proxy
+
+    restart: unless-stopped
+  php:
+    image: php:8.3-fpm
+    container_name: moj_php
+    volumes:
+      - ./html:/var/www/html
+    restart: unless-stopped
+  db:
+    image: mysql:latest
+    container_name: moja_db
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: kurs
+      MYSQL_USER: kurs
+      MYSQL_PASSWORD: kurs123
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+    db_data:
+
+networks:
+  traefik_proxy:
+    external: true
