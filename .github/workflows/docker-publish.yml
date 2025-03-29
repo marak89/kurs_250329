@@ -26,15 +26,16 @@ jobs:
   deploy_via_ssh:
     needs: build_and_push
     runs-on: ubuntu-latest
+
     steps:
         - uses: actions/checkout@v4
 
         - name: Kopiowanie plików na serwer i uruchomienie docker-compose
-          uses: appleboy/scp-action@v.0.1.7
+          uses: appleboy/scp-action@v0.1.7
           with:
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
-            password: ${{ secrets.SSH_PASSWORD}}
+            password: ${{ secrets.SSH_PASSWORD }}
             source: "docker-compose.yml"
             target: "~/app"
 
