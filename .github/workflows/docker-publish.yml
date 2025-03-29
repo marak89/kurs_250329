@@ -34,8 +34,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker pull mark89/kurs-nginx:latest
+            #docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+            docker pull marak89/kurs-nginx:latest
             docker stop kurs-nginx || true
             docker rm kurs-nginx || true
             docker run -d \
