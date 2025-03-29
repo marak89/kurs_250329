@@ -22,3 +22,24 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: marak89/kurs-nginx:latest
+
+  deploy_via_ssh:
+    needs: build_and_push
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Wykonaj deployment na server VPS
+        uses: appleboy/ssh-actions@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST  }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+            docker pull mark89/kurs-nginx:latest
+            docker stop kurs-nginx || true
+            docker rm kurs-nginx || true
+            docker run -d \
+              --name kurs-nginx \
+              -p 8080:80 \
+              --restart unless-stopped \
+              marak89/kurs-nginx:latest
