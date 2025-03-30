@@ -14,7 +14,7 @@ services:
       - "traefik.http.routers.kurs.rule=Host(`kurs.vps1.m89.pl`)"
       - "traefik.http.routers.kurs.entrypoints=websecure"
       - "traefik.http.routers.kurs.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.kurs.service=nginx-kurs@docker"
+      - "traefik.http.routers.kurs.service=nginx-app@docker"
 
     networks:
       - traefik_proxy
